@@ -16,7 +16,6 @@ const colorFns = new Map([
 ]);
 
 export function printEntries(filename: string, entries: Array<BzDoneRecord> = []) {
-  console.log(`Timeline for ${chalk.bold(filename)}:`);
   entries.forEach(printEntry);
 }
 
