@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { format } from 'date-fns';
 
-import { BzDoneRecord, BzDoneInstruction } from "./bzDone";
+import { BzDoneRecord, BzDoneInstruction } from './data';
 
 const dateFormat = 'Pp';
 

@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bin": {
+    "backblaze-doctor": "./src/cli.js"
+  },
   "devDependencies": {
     "@types/glob": "^7.1.4",
     "@types/node": "^16.10.3",

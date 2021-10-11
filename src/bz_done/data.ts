@@ -8,8 +8,6 @@ import _glob from 'glob';
 
 const glob = promisify(_glob);
 
-const BZ_DONE_BASE_PATH = 'bzbackup/bzdatacenter'
-
 export enum BzDoneInstruction {
   SENT = 'File was uploaded to Backblaze',
   EXPUNGED = 'File was deleted (expunged) from Backblaze',
@@ -20,16 +18,6 @@ export enum BzDoneInstruction {
   GOVERNANCE = 'Governance',
   UNKNOWN = 'Unknown'
 }
-
-const instructionCodeMappings: { [index: string]: BzDoneInstruction } = {
-  '+': BzDoneInstruction.SENT,
-  'x': BzDoneInstruction.EXPUNGED,
-  'z': BzDoneInstruction.NOT_EXPUNGED_UNLIMITED_ROLLBACK,
-  '-': BzDoneInstruction.LOCALLY_REMOVED,
-  '=': BzDoneInstruction.DEDUP,
-  '!': BzDoneInstruction.META,
-  'g': BzDoneInstruction.GOVERNANCE
-};
 
 const EntryColumn = {
   VERSION: 0,
@@ -51,6 +39,16 @@ export interface BzDoneRecord {
   source: string;
 }
 
+const instructionCodeMappings: { [index: string]: BzDoneInstruction } = {
+  '+': BzDoneInstruction.SENT,
+  'x': BzDoneInstruction.EXPUNGED,
+  'z': BzDoneInstruction.NOT_EXPUNGED_UNLIMITED_ROLLBACK,
+  '-': BzDoneInstruction.LOCALLY_REMOVED,
+  '=': BzDoneInstruction.DEDUP,
+  '!': BzDoneInstruction.META,
+  'g': BzDoneInstruction.GOVERNANCE
+};
+
 function parseEntry(entry: BzDoneEntry): BzDoneRecord {
   const fields = entry.entry.split('\t');
 
@@ -64,7 +62,7 @@ function parseEntry(entry: BzDoneEntry): BzDoneRecord {
 }
 
 export async function findRecords(bzDataPath: string, searchFilename: string): Promise<Array<BzDoneRecord>> {
-  const bzDonePath = path.resolve(bzDataPath, BZ_DONE_BASE_PATH);
+  const bzDonePath = path.resolve(bzDataPath);
 
   const files = await glob('**/bz_done_*.dat', { cwd: bzDonePath });
   const entries: Array<BzDoneEntry> = (await Promise.all(files.map(file => findEntries(path.resolve(bzDonePath, file), searchFilename)))).flat();
