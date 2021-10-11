@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "bin": {
-    "backblaze-doctor": "./src/cli.js"
+    "bz-doctor": "./src/cli.js"
   },
   "devDependencies": {
     "@types/glob": "^7.1.4",
